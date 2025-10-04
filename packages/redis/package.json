@@ -1,0 +1,32 @@
+{
+  "name": "@repo/redis",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./events": {
+      "types": "./dist/events.d.ts",
+      "default": "./src/events.ts"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "default": "./src/types.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc"
+  },
+  "dependencies": {
+    "redis": "^5.8.2",
+    "@repo/env": "workspace:*",
+    "@repo/validators": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

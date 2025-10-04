@@ -1,0 +1,7 @@
+{
+  "extends": "@repo/tsconfig/base.json",
+  "compilerOptions": {
+    "lib": ["DOM", "ESNext"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

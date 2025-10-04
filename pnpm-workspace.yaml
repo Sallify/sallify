@@ -1,0 +1,24 @@
+packages:
+  - apps/*
+  - packages/*
+  - tooling/*
+
+catalog:
+  arktype: ^2.1.22
+  tailwindcss: ^4.1.14
+  typescript: ^5.9.3
+  lucide-react: ^0.544.0
+  '@trpc/client': ^11.6.0
+  '@trpc/server': ^11.6.0
+
+catalogs:
+  react19:
+    '@types/react': ^19.2.0
+    '@types/react-dom': ^19.2.0
+    react: 19.2.0
+    react-dom: 19.2.0
+   
+
+linkWorkspacePackages: true
+
+nodeLinker: hoisted

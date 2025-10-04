@@ -1,0 +1,44 @@
+{
+  "name": "@repo/web",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 3000",
+    "start": "node .output/server/index.mjs",
+    "build": "vite build ",
+    "serve": "vite preview --port 3000",
+    "clean": "git clean -xdf .cache .output .tanstack .turbo node_modules"
+  },
+  "dependencies": {
+    "@repo/api": "workspace:*",
+    "@repo/auth": "workspace:*",
+    "@repo/env": "workspace:*",
+    "@tailwindcss/vite": "^4.0.6",
+    "@tanstack/react-devtools": "^0.7.0",
+    "@tanstack/react-query": "^5.90.2",
+    "@tanstack/react-query-devtools": "^5.89.0",
+    "@tanstack/react-router": "^1.132.33",
+    "@tanstack/react-router-devtools": "^1.132.33",
+    "@tanstack/react-start": "^1.132.33",
+    "@tanstack/router-plugin": "^1.132.33",
+    "@trpc/client": "catalog:",
+    "@trpc/server": "catalog:",
+    "@trpc/tanstack-react-query": "^11.5.1",
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19",
+    "superjson": "2.2.2",
+    "tailwindcss": "catalog:",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "devDependencies": {
+    "@repo/tailwind-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^22.10.2",
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "catalog:",
+    "vite": "^7.1.7",
+    "web-vitals": "^5.1.0",
+    "@tanstack/nitro-v2-vite-plugin": "^1.132.33"
+  }
+}

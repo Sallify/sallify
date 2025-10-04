@@ -1,0 +1,25 @@
+{
+  "name": "@repo/auth",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "generate": "pnpx @better-auth/cli generate --config script/auth-cli.ts --output ../db/src/auth.ts"
+  },
+  "dependencies": {
+    "@repo/db": "workspace:*",
+    "@repo/env": "workspace:*",
+    "better-auth": "1.3.13",
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19",
+    "arktype": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@better-auth/cli": "1.3.13",
+    "@types/react": "catalog:react19",
+    "typescript": "catalog:"
+  }
+}

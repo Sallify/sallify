@@ -1,0 +1,23 @@
+{
+  "name": "@repo/env",
+  "type": "module",
+  "exports": {
+    ".": [
+      "./src/env.ts"
+    ]
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "git clean -xdf node_modules"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "^0.13.8",
+    "arktype": "catalog:",
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^22.15.3",
+    "typescript": "catalog:"
+  }
+}

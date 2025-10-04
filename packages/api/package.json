@@ -1,0 +1,30 @@
+{
+  "name": "@repo/api",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc"
+  },
+  "dependencies": {
+    "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/redis": "workspace:*",
+    "@repo/env": "workspace:*",
+    "@repo/validators": "workspace:*",
+    "@trpc/server": "catalog:",
+    "arktype": "catalog:",
+    "jose": "^6.1.0",
+    "superjson": "2.2.2"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

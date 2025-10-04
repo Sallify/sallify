@@ -1,0 +1,41 @@
+{
+  "name": "@repo/ui",
+  "type": "module",
+  "exports": {
+    "./components/*": {
+      "types": "./src/components/*.tsx",
+      "default": "./src/components/*.tsx"
+    },
+    "./lib/*": {
+      "types": "./src/lib/*.ts",
+      "default": "./src/lib/*.ts"
+    },
+    "./hooks/*": {
+      "types": "./src/hooks/*.ts",
+      "default": "./src/hooks/*.ts"
+    },
+    "./*": {
+      "types": "./src/*.ts",
+      "default": "./src/*.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "add": "pnpm dlx shadcn@latest add"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "lucide-react": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/tailwind-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@tailwindcss/cli": "^4.1.13",
+    "@types/react": "catalog:react19",
+    "react": "catalog:react19",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}
