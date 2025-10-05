@@ -119,10 +119,24 @@ export function ThemeProvider({
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
       <ScriptOnce>
-        {`document.documentElement.classList.toggle(
-            'dark',
-            localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-            )`}
+        {`
+    (function() {
+      const stored = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      let resolved;
+      if (!stored || stored === 'system') {
+        resolved = systemPrefersDark ? 'dark' : 'light';
+      } else if (stored === 'dark') {
+        resolved = 'dark';
+      } else {
+        resolved = 'light';
+      }
+
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(resolved);
+    })();
+    `}
       </ScriptOnce>
       {children}
     </ThemeProviderContext.Provider>
