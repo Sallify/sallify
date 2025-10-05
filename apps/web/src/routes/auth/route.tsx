@@ -10,7 +10,7 @@ export const Route = createFileRoute("/auth")({
   validateSearch: authSearchSchema,
   beforeLoad: async ({ context, search }) => {
     const user = await context.queryClient.ensureQueryData(
-      context.trpc.auth.getUser.queryOptions()
+      context.trpc.auth.getCurrentUser.queryOptions()
     );
 
     if (user) {

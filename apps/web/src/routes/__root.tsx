@@ -16,10 +16,12 @@ import appCss from "@/styles/app.css?url";
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   trpc: TRPCOptionsProxy<AppRouter>;
-  user: RouterOutputs["auth"]["getUser"];
+  user: RouterOutputs["auth"]["getCurrentUser"];
 }>()({
   beforeLoad: ({ context }) => {
-    context.queryClient.prefetchQuery(context.trpc.auth.getUser.queryOptions());
+    context.queryClient.prefetchQuery(
+      context.trpc.auth.getCurrentUser.queryOptions()
+    );
   },
   head: () => ({
     meta: [

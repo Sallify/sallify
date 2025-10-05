@@ -9,20 +9,14 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { type SignUpInput, signUpSchema } from "@repo/validators/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
 import { useTRPC } from "@/lib/trpc";
 import { authClient } from "@/modules/auth/lib/client";
 import { SignInSocialButton } from "./sign-in-social-button";
-
-const formSchema = z.object({
-  name: z.string().min(4),
-  email: z.email(),
-  password: z.string().min(1),
-});
 
 export function SignUpForm() {
   const { redirectUrl } = useRouteContext({
@@ -33,8 +27,8 @@ export function SignUpForm() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SignUpInput>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -43,7 +37,7 @@ export function SignUpForm() {
   });
 
   const signUp = useMutation({
-    mutationFn: async (values: z.infer<typeof formSchema>) => {
+    mutationFn: async (values: SignUpInput) => {
       await authClient.signUp.email(
         {
           ...values,
@@ -55,7 +49,7 @@ export function SignUpForm() {
           },
           onSuccess: () => {
             queryClient.removeQueries({
-              queryKey: trpc.auth.getUser.queryKey(),
+              queryKey: trpc.auth.getCurrentUser.queryKey(),
             });
             navigate({ to: redirectUrl });
           },
@@ -66,7 +60,7 @@ export function SignUpForm() {
 
   const isPending = signUp.isPending;
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: SignUpInput) {
     signUp.mutate(values);
   }
 

@@ -9,26 +9,21 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { type SignInInput, signInSchema } from "@repo/validators/auth";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
 import { authClient } from "@/modules/auth/lib/client";
 import { SignInSocialButton } from "@/modules/auth/ui/components/sign-in-social-button";
-
-const formSchema = z.object({
-  email: z.email(),
-  password: z.string().min(1),
-});
 
 export function SignInForm() {
   const { redirectUrl } = useRouteContext({
     from: "/auth",
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SignInInput>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -36,7 +31,7 @@ export function SignInForm() {
   });
 
   const signIn = useMutation({
-    mutationFn: async (values: z.infer<typeof formSchema>) => {
+    mutationFn: async (values: SignInInput) => {
       await authClient.signIn.email(
         {
           ...values,
@@ -53,7 +48,7 @@ export function SignInForm() {
 
   const isPending = signIn.isPending;
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: SignInInput) {
     signIn.mutate(values);
   }
 

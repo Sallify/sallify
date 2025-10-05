@@ -4,7 +4,7 @@ export const Route = createFileRoute("/_authed")({
   component: RouteComponent,
   beforeLoad: async ({ context }) => {
     const user = await context.queryClient.ensureQueryData({
-      ...context.trpc.auth.getUser.queryOptions(),
+      ...context.trpc.auth.getCurrentUser.queryOptions(),
       revalidateIfStale: true,
     });
 
