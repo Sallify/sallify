@@ -26,9 +26,9 @@ import {
   PaletteIcon,
   SunIcon,
 } from "lucide-react";
-import { ThemeToggle } from "@/components/test";
-import { useTheme } from "@/components/theme-provider";
+import { type Theme, useTheme } from "@/components/theme-provider";
 import { getInitials } from "@/utils/get-initials";
+import { startThemeTransition } from "@/utils/theme-transition";
 
 type UserButtonProps = React.ComponentProps<typeof DropdownMenuTrigger>;
 
@@ -37,11 +37,21 @@ export function UserButton({ ...props }: UserButtonProps) {
     from: "/_authed/",
   });
 
-  const { setTheme } = useTheme();
+  const { theme, systemTheme, setTheme } = useTheme();
+
+  function handleThemeToggle(newTheme: Theme) {
+    const resolvedCurrent = theme === "system" ? systemTheme : theme;
+    const resolvedNext = newTheme === "system" ? systemTheme : newTheme;
+
+    if (resolvedCurrent === resolvedNext) {
+      return setTheme(newTheme);
+    }
+
+    startThemeTransition(() => setTheme(newTheme));
+  }
 
   return (
     <DropdownMenu>
-      <ThemeToggle />
       <DropdownMenuTrigger asChild {...props}>
         <Button
           className="h-12 p-2 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground dark:data-[state=open]:bg-accent/50"
@@ -86,14 +96,26 @@ export function UserButton({ ...props }: UserButtonProps) {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onClick={(v) => v && setTheme("light")}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    handleThemeToggle("light");
+                  }}
+                >
                   <SunIcon />
                   Light
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={(v) => v && setTheme("dark")}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    handleThemeToggle("dark");
+                  }}
+                >
                   <MoonIcon /> Dark
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={(v) => v && setTheme("system")}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    handleThemeToggle("system");
+                  }}
+                >
                   <LaptopMinimalIcon /> System
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
