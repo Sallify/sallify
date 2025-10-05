@@ -121,7 +121,7 @@ export function ThemeProvider({
       <ScriptOnce>
         {`
     (function() {
-      const stored = localStorage.getItem('theme');
+      const stored = localStorage.getItem('${storageKey}');
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
       let resolved;
