@@ -33,7 +33,7 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "theme",
+  storageKey = "sallify-theme",
   ...props
 }: ThemeProviderProps) {
   function getSystemTheme() {

@@ -17,7 +17,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useRouteContext } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouteContext, useRouter } from "@tanstack/react-router";
 import {
   ChevronsUpDownIcon,
   LaptopMinimalIcon,
@@ -27,8 +28,10 @@ import {
   SunIcon,
 } from "lucide-react";
 import { type Theme, useTheme } from "@/components/theme-provider";
+import { useTRPC } from "@/lib/trpc";
 import { getInitials } from "@/utils/get-initials";
 import { startThemeTransition } from "@/utils/theme-transition";
+import { authClient } from "../../lib/client";
 
 type UserButtonProps = React.ComponentProps<typeof DropdownMenuTrigger>;
 
@@ -36,8 +39,11 @@ export function UserButton({ ...props }: UserButtonProps) {
   const { user } = useRouteContext({
     from: "/_authed/",
   });
+  const router = useRouter();
 
   const { theme, systemTheme, setTheme } = useTheme();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
 
   function handleThemeToggle(newTheme: Theme) {
     const resolvedCurrent = theme === "system" ? systemTheme : theme;
@@ -121,7 +127,21 @@ export function UserButton({ ...props }: UserButtonProps) {
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={async () => {
+              await authClient.signOut({
+                fetchOptions: {
+                  onResponse: async () => {
+                    queryClient.setQueryData(
+                      trpc.auth.getCurrentUser.queryKey(),
+                      null
+                    );
+                    await router.invalidate();
+                  },
+                },
+              });
+            }}
+          >
             <LogOutIcon />
             Log out
           </DropdownMenuItem>
