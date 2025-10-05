@@ -32,7 +32,8 @@
     "superjson": "2.2.2",
     "tailwindcss": "catalog:",
     "vite-tsconfig-paths": "^5.1.4",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "lucide-react": "catalog:"
   },
   "devDependencies": {
     "@repo/tailwind-config": "workspace:*",

@@ -11,6 +11,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import type React from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 import appCss from "@/styles/app.css?url";
 
 export const Route = createRootRouteWithContext<{
@@ -55,8 +56,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
-        <Toaster richColors />
+        <ThemeProvider defaultTheme="light">
+          {children}
+          <Toaster richColors />
+        </ThemeProvider>
         <TanStackDevtools
           config={{
             position: "bottom-left",

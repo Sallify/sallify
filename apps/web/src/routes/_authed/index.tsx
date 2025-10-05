@@ -1,15 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { UserButton } from "@/modules/auth/ui/components/user-button";
 
 export const Route = createFileRoute("/_authed/")({
   component: App,
 });
 
 function App() {
-  const { user } = Route.useRouteContext();
-
   return (
     <div>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
+      <UserButton className="w-60" />
     </div>
   );
 }
