@@ -1,11 +1,13 @@
 import { type TRPCRouterRecord, tracked } from "@trpc/server";
-import { type } from "arktype";
+import { z } from "zod/v4";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const testRouter = {
-  list: publicProcedure.input(type({ name: "string" })).query(({ input }) => {
-    return `hello ${input.name}`;
-  }),
+  list: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .query(({ input }) => {
+      return `hello ${input.name}`;
+    }),
   onSendMessage: protectedProcedure.subscription(async function* (opts) {
     const { signal } = opts;
     let count = 0;

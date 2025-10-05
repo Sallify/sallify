@@ -1,22 +1,22 @@
 import { createEnv } from "@t3-oss/env-core";
-import { type } from "arktype";
 import { configDotenv } from "dotenv";
+import { z } from "zod/v4";
 
 configDotenv({ path: "../../.env", quiet: true });
 
 export const env = createEnv({
   server: {
-    AUTH_SECRET: type("string"),
-    AUTH_DISCORD_ID: type("string"),
-    AUTH_DISCORD_SECRET: type("string"),
-    AUTH_URL: type("string"),
-    DATABASE_URL: type("string"),
-    REDIS_URL: type("string"),
+    AUTH_SECRET: z.string(),
+    AUTH_DISCORD_ID: z.string(),
+    AUTH_DISCORD_SECRET: z.string(),
+    AUTH_URL: z.string(),
+    DATABASE_URL: z.string(),
+    REDIS_URL: z.string(),
   },
   clientPrefix: "VITE_",
   client: {
-    VITE_WS_URL: type("string"),
-    VITE_PRODUCTION_URL: type("string"),
+    VITE_WS_URL: z.string(),
+    VITE_PRODUCTION_URL: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

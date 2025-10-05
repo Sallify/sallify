@@ -24,7 +24,7 @@ export function initAuth(options: {
         productionURL: options.productionUrl,
       }),
       reactStartCookies(),
-      jwt()
+      jwt(),
     ],
     socialProviders: {
       discord: {
@@ -32,6 +32,9 @@ export function initAuth(options: {
         clientSecret: options.discordClientSecret,
         redirectURI: `${options.productionUrl}/api/auth/callback/discord`,
       },
+    },
+    emailAndPassword: {
+      enabled: true,
     },
     session: {
       cookieCache: {

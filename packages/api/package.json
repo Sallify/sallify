@@ -19,7 +19,7 @@
     "@repo/env": "workspace:*",
     "@repo/validators": "workspace:*",
     "@trpc/server": "catalog:",
-    "arktype": "catalog:",
+    "zod": "catalog:",
     "jose": "^6.1.0",
     "superjson": "2.2.2"
   },

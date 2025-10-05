@@ -9,9 +9,11 @@
     "clean": "git clean -xdf .cache .output .tanstack .turbo node_modules"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@repo/api": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/env": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-query": "^5.90.2",
@@ -25,20 +27,22 @@
     "@trpc/tanstack-react-query": "^11.5.1",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
+    "sonner": "^2.0.7",
     "superjson": "2.2.2",
     "tailwindcss": "catalog:",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/tailwind-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
+    "@tanstack/nitro-v2-vite-plugin": "^1.132.33",
     "@types/node": "^22.10.2",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "@vitejs/plugin-react": "^5.0.4",
     "typescript": "catalog:",
     "vite": "^7.1.7",
-    "web-vitals": "^5.1.0",
-    "@tanstack/nitro-v2-vite-plugin": "^1.132.33"
+    "web-vitals": "^5.1.0"
   }
 }

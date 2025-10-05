@@ -1,4 +1,5 @@
-import type { AppRouter } from "@repo/api";
+import type { AppRouter, RouterOutputs } from "@repo/api";
+import { Toaster } from "@repo/ui/components/sonner";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
@@ -15,7 +16,11 @@ import appCss from "@/styles/app.css?url";
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   trpc: TRPCOptionsProxy<AppRouter>;
+  user: RouterOutputs["auth"]["getUser"];
 }>()({
+  beforeLoad: ({ context }) => {
+    context.queryClient.prefetchQuery(context.trpc.auth.getUser.queryOptions());
+  },
   head: () => ({
     meta: [
       {
@@ -49,6 +54,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster richColors />
         <TanStackDevtools
           config={{
             position: "bottom-left",

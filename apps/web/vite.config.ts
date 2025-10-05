@@ -9,7 +9,7 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 const config = defineConfig({
   plugins: [
     viteTsConfigPaths({
-      projects: ["./tsconfig.json"],
+      projects: ["./tsconfig.json", "../../packages/ui/tsconfig.json"],
     }),
     tailwindcss(),
     tanstackStart({
