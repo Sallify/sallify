@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { ServerList } from "@/modules/servers/ui/components/server-list";
 
 export const Route = createFileRoute("/_authed")({
   component: RouteComponent,
@@ -22,5 +23,10 @@ export const Route = createFileRoute("/_authed")({
 });
 
 function RouteComponent() {
-  return <Outlet />;
+  return (
+    <div className="flex">
+      <ServerList />
+      <Outlet />
+    </div>
+  );
 }
