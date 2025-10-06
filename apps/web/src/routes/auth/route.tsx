@@ -2,7 +2,14 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { z } from "zod/v4";
 
 const authSearchSchema = z.object({
-  redirectUrl: z.string().min(2).optional().default("/").catch("/"),
+  redirectUrl: z
+    .string()
+    .optional()
+    .refine(
+      (value) => !value || (value.startsWith("/") && !value.startsWith("//"))
+    )
+    .default("/")
+    .catch("/"),
 });
 
 export const Route = createFileRoute("/auth")({

@@ -55,7 +55,7 @@ export function ThemeProvider({
       return stored;
     }
 
-    return defaultTheme === "system" ? getSystemTheme() : defaultTheme;
+    return defaultTheme;
   }
 
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
