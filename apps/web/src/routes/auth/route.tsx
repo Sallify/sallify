@@ -8,8 +8,8 @@ const authSearchSchema = z.object({
     .refine(
       (value) => !value || (value.startsWith("/") && !value.startsWith("//"))
     )
-    .default("/")
-    .catch("/"),
+    .default("/channels/@me")
+    .catch("/channels/@me"),
 });
 
 export const Route = createFileRoute("/auth")({

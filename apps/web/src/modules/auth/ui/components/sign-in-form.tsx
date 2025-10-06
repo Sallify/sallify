@@ -82,7 +82,7 @@ export function SignInForm() {
                 <FormLabel>Password</FormLabel>
                 <Link
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  to="/"
+                  to="."
                 >
                   Forgot your password?
                 </Link>
