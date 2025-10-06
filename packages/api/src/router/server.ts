@@ -2,6 +2,7 @@ import { and, eq, exists, or } from "@repo/db";
 import { channel, member, server } from "@repo/db/schema";
 import { createServerSchema } from "@repo/validators/server";
 import { TRPCError, type TRPCRouterRecord } from "@trpc/server";
+import { z } from "zod/v4";
 import { protectedProcedure } from "../trpc";
 
 export const serverRouter = {
@@ -32,6 +33,41 @@ export const serverRouter = {
       },
     });
   }),
+  getOne: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const existingServer = await ctx.db.query.server.findFirst({
+        where: eq(server.id, input.id),
+        with: {
+          members: true,
+        },
+      });
+
+      if (!existingServer) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Server not found",
+        });
+      }
+
+      const { members, ...serverWithoutMembers } = existingServer;
+
+      if (
+        serverWithoutMembers.ownerId !== ctx.user.id &&
+        !members.some((m) => m.userId === ctx.user.id)
+      ) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You are not a member of this server",
+        });
+      }
+
+      return serverWithoutMembers;
+    }),
   create: protectedProcedure
     .input(createServerSchema)
     .mutation(async ({ ctx, input }) => {

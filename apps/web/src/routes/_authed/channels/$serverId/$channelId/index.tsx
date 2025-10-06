@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useParams } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authed/channels/$serverId/$channelId/")(
   {
@@ -7,5 +7,9 @@ export const Route = createFileRoute("/_authed/channels/$serverId/$channelId/")(
 );
 
 function RouteComponent() {
-  return <div>channel messages</div>;
+  const params = useParams({
+    from: "/_authed/channels/$serverId/$channelId/",
+  });
+
+  return <div className="w-full">channel: {params.channelId}</div>;
 }
