@@ -3,7 +3,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@repo/ui/components/avatar";
-import { buttonVariants } from "@repo/ui/components/button";
+import { Button, buttonVariants } from "@repo/ui/components/button";
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
@@ -13,12 +13,15 @@ import {
 } from "@repo/ui/components/tooltip";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { HouseIcon } from "lucide-react";
-import { Suspense } from "react";
+import { HouseIcon, PlusIcon } from "lucide-react";
+import { Suspense, useState } from "react";
 import { useTRPC } from "@/lib/trpc";
+import { AddServerDialog } from "@/modules/servers/ui/components/add-server-dialog";
 import { getInitials } from "@/utils/get-initials";
 
 export function ServerList() {
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
   return (
     <div className="flex min-h-full w-18 flex-col items-center gap-3 border-r bg-sidebar p-4">
       <Tooltip>
@@ -38,9 +41,28 @@ export function ServerList() {
         </TooltipContent>
       </Tooltip>
       <Separator />
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className="size-10 shrink-0 rounded-lg"
+            onClick={() => setIsAddDialogOpen(true)}
+            size="icon"
+            variant="secondary"
+          >
+            <PlusIcon />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Add a server</p>
+        </TooltipContent>
+      </Tooltip>
       <Suspense fallback={<ServerListLoading />}>
         <ServerListSuspense />
       </Suspense>
+      <AddServerDialog
+        onOpenChange={setIsAddDialogOpen}
+        open={isAddDialogOpen}
+      />
     </div>
   );
 }
