@@ -1,3 +1,4 @@
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -33,15 +34,23 @@ export function SignInSocialButton({
   const isPending = signIn.isPending;
   const isSuccess = signIn.isSuccess;
 
+  const lastMethod = authClient.getLastUsedLoginMethod();
+
   return (
-    <Button
-      disabled={isPending || isSuccess || disabled}
-      type="button"
-      variant="outline"
-      {...props}
-      onClick={() => signIn.mutate()}
-    >
-      {children}
-    </Button>
+    <div className="relative w-full">
+      <Button
+        className="w-full"
+        disabled={isPending || isSuccess || disabled}
+        onClick={() => signIn.mutate()}
+        type="button"
+        variant="outline"
+        {...props}
+      >
+        {children}
+        {lastMethod === provider && (
+          <Badge className="-top-1.5 -right-1.5 absolute">Last used</Badge>
+        )}
+      </Button>
+    </div>
   );
 }
