@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.8",
-    "arktype": "catalog:",
+    "zod": "catalog:",
     "dotenv": "^17.2.3"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ import { cache } from "react";
 
 export const auth = initAuth({
   baseUrl: env.AUTH_URL,
-  productionUrl: env.PRODUCTION_URL,
+  productionUrl: env.VITE_PRODUCTION_URL,
   secret: env.AUTH_SECRET,
   discordClientId: env.AUTH_DISCORD_ID,
   discordClientSecret: env.AUTH_DISCORD_SECRET,

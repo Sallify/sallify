@@ -91,10 +91,12 @@ export const getRouter = () => {
   });
 
   return createRouter({
-    context: { queryClient, trpc },
     routeTree,
+    context: { queryClient, trpc, user: null },
+    defaultPreload: "intent",
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
+    defaultStructuralSharing: true,
     Wrap: (props) => {
       return (
         <TRPCProvider queryClient={queryClient} trpcClient={trpcClient}>

@@ -1,4 +1,5 @@
-import type { AppRouter } from "@repo/api";
+import type { AppRouter, RouterOutputs } from "@repo/api";
+import { Toaster } from "@repo/ui/components/sonner";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
@@ -10,12 +11,19 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import type React from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 import appCss from "@/styles/app.css?url";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   trpc: TRPCOptionsProxy<AppRouter>;
+  user: RouterOutputs["auth"]["getCurrentUser"];
 }>()({
+  beforeLoad: ({ context }) => {
+    context.queryClient.prefetchQuery(
+      context.trpc.auth.getCurrentUser.queryOptions()
+    );
+  },
   head: () => ({
     meta: [
       {
@@ -43,12 +51,15 @@ export const Route = createRootRouteWithContext<{
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        {children}
+        <ThemeProvider defaultTheme="system">
+          {children}
+          <Toaster richColors />
+        </ThemeProvider>
         <TanStackDevtools
           config={{
             position: "bottom-left",

@@ -18,7 +18,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules .drizzle",
-    "dev": "tsc",
+    "dev": "tsc --noEmit",
     "push": "pnpm drizzle-kit push",
     "studio": "pnpm drizzle-kit studio",
     "view": "concurrently \"pnpm drizzle-kit studio\" \"pnpm dlx drizzle-lab visualizer\" \"sleep 1 && pnpm dlx drizzle-view\""
