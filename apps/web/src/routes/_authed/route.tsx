@@ -1,5 +1,9 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { ServerList } from "@/modules/servers/ui/components/server-list";
+import { Suspense } from "react";
+import {
+  ServerList,
+  ServerListLoading,
+} from "@/modules/servers/ui/components/server-list";
 
 export const Route = createFileRoute("/_authed")({
   component: RouteComponent,
@@ -18,14 +22,20 @@ export const Route = createFileRoute("/_authed")({
       });
     }
 
+    context.queryClient.prefetchQuery(
+      context.trpc.server.getMany.queryOptions()
+    );
+
     return { user };
   },
 });
 
 function RouteComponent() {
   return (
-    <div className="flex">
-      <ServerList />
+    <div className="flex min-h-screen">
+      <Suspense fallback={<ServerListLoading />}>
+        <ServerList />
+      </Suspense>
       <Outlet />
     </div>
   );

@@ -55,7 +55,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="flex min-h-screen flex-col antialiased">
         <ThemeProvider defaultTheme="system">
           {children}
           <Toaster richColors />
