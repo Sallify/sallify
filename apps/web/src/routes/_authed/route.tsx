@@ -1,9 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { Suspense } from "react";
-import {
-  ServerList,
-  ServerListLoading,
-} from "@/modules/servers/ui/components/server-list";
+import { ServerList } from "@/modules/servers/ui/components/server-list";
 
 export const Route = createFileRoute("/_authed")({
   component: RouteComponent,
@@ -33,9 +29,7 @@ export const Route = createFileRoute("/_authed")({
 function RouteComponent() {
   return (
     <div className="flex min-h-screen">
-      <Suspense fallback={<ServerListLoading />}>
-        <ServerList />
-      </Suspense>
+      <ServerList />
       <Outlet />
     </div>
   );

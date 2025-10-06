@@ -14,14 +14,11 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { HouseIcon } from "lucide-react";
+import { Suspense } from "react";
 import { useTRPC } from "@/lib/trpc";
 import { getInitials } from "@/utils/get-initials";
 
 export function ServerList() {
-  const trpc = useTRPC();
-
-  const { data } = useSuspenseQuery(trpc.server.getMany.queryOptions());
-
   return (
     <div className="flex min-h-full w-18 flex-col items-center gap-3 border-r bg-sidebar p-4">
       <Tooltip>
@@ -41,6 +38,20 @@ export function ServerList() {
         </TooltipContent>
       </Tooltip>
       <Separator />
+      <Suspense fallback={<ServerListLoading />}>
+        <ServerListSuspense />
+      </Suspense>
+    </div>
+  );
+}
+
+function ServerListSuspense() {
+  const trpc = useTRPC();
+
+  const { data } = useSuspenseQuery(trpc.server.getMany.queryOptions());
+
+  return (
+    <>
       {data.map((server) => (
         <div className="group relative" key={server.id}>
           <Tooltip>
@@ -65,7 +76,7 @@ export function ServerList() {
           </Tooltip>
         </div>
       ))}
-    </div>
+    </>
   );
 }
 
@@ -75,12 +86,10 @@ export function ServerListLoading() {
   }));
 
   return (
-    <div className="flex min-h-full w-18 flex-col items-center gap-3 border-r bg-sidebar p-4">
-      <Skeleton className="size-10 rounded-lg" />
-      <Separator />
+    <>
       {loadingServers.map((server) => (
         <Skeleton className="size-10 rounded-full" key={server.key} />
       ))}
-    </div>
+    </>
   );
 }
