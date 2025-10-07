@@ -20,7 +20,20 @@
 //       };
 //     };
 
-// biome-ignore lint/complexity/noBannedTypes: ignore for now
+export type MessageEvent = {
+  type: "MESSAGE_CREATED";
+  payload: {
+    serverId: string;
+    channelId: string;
+    content: string;
+    author: {
+      name: string;
+      image: string | null;
+    };
+  };
+};
+
 export type EventMap = {
   // server: ServerEvent;
+  message: MessageEvent;
 };

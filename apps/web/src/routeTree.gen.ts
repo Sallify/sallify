@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
+import { Route as RouteRouteImport } from './routes/route'
 import { Route as InviteCodeRouteImport } from './routes/invite/$code'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
@@ -20,6 +21,7 @@ import { Route as AuthedChannelsAtmeRouteRouteImport } from './routes/_authed/ch
 import { Route as AuthedChannelsServerIdRouteRouteImport } from './routes/_authed/channels/$serverId/route'
 import { Route as AuthedChannelsAtmeIndexRouteImport } from './routes/_authed/channels/@me/index'
 import { Route as AuthedChannelsAtmeDmIdRouteImport } from './routes/_authed/channels/@me/$dmId'
+import { Route as AuthedChannelsServerIdChannelIdRouteRouteImport } from './routes/_authed/channels/$serverId/$channelId/route'
 import { Route as AuthedChannelsServerIdChannelIdIndexRouteImport } from './routes/_authed/channels/$serverId/$channelId/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -29,6 +31,11 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 } as any)
 const AuthedRouteRoute = AuthedRouteRouteImport.update({
   id: '/_authed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RouteRoute = RouteRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InviteCodeRoute = InviteCodeRouteImport.update({
@@ -77,14 +84,21 @@ const AuthedChannelsAtmeDmIdRoute = AuthedChannelsAtmeDmIdRouteImport.update({
   path: '/$dmId',
   getParentRoute: () => AuthedChannelsAtmeRouteRoute,
 } as any)
+const AuthedChannelsServerIdChannelIdRouteRoute =
+  AuthedChannelsServerIdChannelIdRouteRouteImport.update({
+    id: '/$channelId',
+    path: '/$channelId',
+    getParentRoute: () => AuthedChannelsServerIdRouteRoute,
+  } as any)
 const AuthedChannelsServerIdChannelIdIndexRoute =
   AuthedChannelsServerIdChannelIdIndexRouteImport.update({
-    id: '/$channelId/',
-    path: '/$channelId/',
-    getParentRoute: () => AuthedChannelsServerIdRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthedChannelsServerIdChannelIdRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof RouteRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -93,11 +107,13 @@ export interface FileRoutesByFullPath {
   '/channels/@me': typeof AuthedChannelsAtmeRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
+  '/channels/$serverId/$channelId': typeof AuthedChannelsServerIdChannelIdRouteRouteWithChildren
   '/channels/@me/$dmId': typeof AuthedChannelsAtmeDmIdRoute
   '/channels/@me/': typeof AuthedChannelsAtmeIndexRoute
-  '/channels/$serverId/$channelId': typeof AuthedChannelsServerIdChannelIdIndexRoute
+  '/channels/$serverId/$channelId/': typeof AuthedChannelsServerIdChannelIdIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof RouteRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -111,6 +127,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof RouteRoute
   '/_authed': typeof AuthedRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
@@ -120,6 +137,7 @@ export interface FileRoutesById {
   '/_authed/channels/@me': typeof AuthedChannelsAtmeRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
+  '/_authed/channels/$serverId/$channelId': typeof AuthedChannelsServerIdChannelIdRouteRouteWithChildren
   '/_authed/channels/@me/$dmId': typeof AuthedChannelsAtmeDmIdRoute
   '/_authed/channels/@me/': typeof AuthedChannelsAtmeIndexRoute
   '/_authed/channels/$serverId/$channelId/': typeof AuthedChannelsServerIdChannelIdIndexRoute
@@ -127,6 +145,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/auth'
     | '/auth/sign-in'
     | '/auth/sign-up'
@@ -135,11 +154,13 @@ export interface FileRouteTypes {
     | '/channels/@me'
     | '/api/auth/$'
     | '/api/trpc/$'
+    | '/channels/$serverId/$channelId'
     | '/channels/@me/$dmId'
     | '/channels/@me/'
-    | '/channels/$serverId/$channelId'
+    | '/channels/$serverId/$channelId/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/auth'
     | '/auth/sign-in'
     | '/auth/sign-up'
@@ -152,6 +173,7 @@ export interface FileRouteTypes {
     | '/channels/$serverId/$channelId'
   id:
     | '__root__'
+    | '/'
     | '/_authed'
     | '/auth'
     | '/auth/sign-in'
@@ -161,12 +183,14 @@ export interface FileRouteTypes {
     | '/_authed/channels/@me'
     | '/api/auth/$'
     | '/api/trpc/$'
+    | '/_authed/channels/$serverId/$channelId'
     | '/_authed/channels/@me/$dmId'
     | '/_authed/channels/@me/'
     | '/_authed/channels/$serverId/$channelId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  RouteRoute: typeof RouteRoute
   AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   InviteCodeRoute: typeof InviteCodeRoute
@@ -188,6 +212,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof RouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invite/$code': {
@@ -253,24 +284,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedChannelsAtmeDmIdRouteImport
       parentRoute: typeof AuthedChannelsAtmeRouteRoute
     }
-    '/_authed/channels/$serverId/$channelId/': {
-      id: '/_authed/channels/$serverId/$channelId/'
+    '/_authed/channels/$serverId/$channelId': {
+      id: '/_authed/channels/$serverId/$channelId'
       path: '/$channelId'
       fullPath: '/channels/$serverId/$channelId'
-      preLoaderRoute: typeof AuthedChannelsServerIdChannelIdIndexRouteImport
+      preLoaderRoute: typeof AuthedChannelsServerIdChannelIdRouteRouteImport
       parentRoute: typeof AuthedChannelsServerIdRouteRoute
+    }
+    '/_authed/channels/$serverId/$channelId/': {
+      id: '/_authed/channels/$serverId/$channelId/'
+      path: '/'
+      fullPath: '/channels/$serverId/$channelId/'
+      preLoaderRoute: typeof AuthedChannelsServerIdChannelIdIndexRouteImport
+      parentRoute: typeof AuthedChannelsServerIdChannelIdRouteRoute
     }
   }
 }
 
-interface AuthedChannelsServerIdRouteRouteChildren {
+interface AuthedChannelsServerIdChannelIdRouteRouteChildren {
   AuthedChannelsServerIdChannelIdIndexRoute: typeof AuthedChannelsServerIdChannelIdIndexRoute
+}
+
+const AuthedChannelsServerIdChannelIdRouteRouteChildren: AuthedChannelsServerIdChannelIdRouteRouteChildren =
+  {
+    AuthedChannelsServerIdChannelIdIndexRoute:
+      AuthedChannelsServerIdChannelIdIndexRoute,
+  }
+
+const AuthedChannelsServerIdChannelIdRouteRouteWithChildren =
+  AuthedChannelsServerIdChannelIdRouteRoute._addFileChildren(
+    AuthedChannelsServerIdChannelIdRouteRouteChildren,
+  )
+
+interface AuthedChannelsServerIdRouteRouteChildren {
+  AuthedChannelsServerIdChannelIdRouteRoute: typeof AuthedChannelsServerIdChannelIdRouteRouteWithChildren
 }
 
 const AuthedChannelsServerIdRouteRouteChildren: AuthedChannelsServerIdRouteRouteChildren =
   {
-    AuthedChannelsServerIdChannelIdIndexRoute:
-      AuthedChannelsServerIdChannelIdIndexRoute,
+    AuthedChannelsServerIdChannelIdRouteRoute:
+      AuthedChannelsServerIdChannelIdRouteRouteWithChildren,
   }
 
 const AuthedChannelsServerIdRouteRouteWithChildren =
@@ -324,6 +377,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  RouteRoute: RouteRoute,
   AuthedRouteRoute: AuthedRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   InviteCodeRoute: InviteCodeRoute,

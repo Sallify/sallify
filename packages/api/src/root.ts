@@ -1,8 +1,9 @@
 import { authRouter } from "./router/auth";
 import { channelRouter } from "./router/channel";
+import { eventRouter } from "./router/event";
 import { memberRouter } from "./router/member";
+import { messageRouter } from "./router/message";
 import { serverRouter } from "./router/server";
-import { testRouter } from "./router/test";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
@@ -10,7 +11,8 @@ export const appRouter = createTRPCRouter({
   server: serverRouter,
   channel: channelRouter,
   member: memberRouter,
-  test: testRouter,
+  message: messageRouter,
+  event: eventRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -2,7 +2,6 @@
   "name": "@repo/websocket",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
     "clean": "git clean -xdf .turbo node_modules"
   },

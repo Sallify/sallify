@@ -47,7 +47,6 @@ export const serverRouter = {
           channels: {
             orderBy: channel.position,
             columns: {
-              topic: false,
               createdAt: false,
               updatedAt: false,
             },
