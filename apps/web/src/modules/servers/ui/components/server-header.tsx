@@ -24,9 +24,13 @@ export function ServerHeader() {
   );
 
   return (
-    <div className="flex h-12 items-center justify-between border-b p-2">
-      <Button size="sm" variant="ghost">
-        {data.name}
+    <div className="flex h-12 max-w-[300px] items-center justify-between gap-2 border-b p-2">
+      <Button
+        className="max-w-[244px] items-center justify-start overflow-hidden"
+        size="sm"
+        variant="ghost"
+      >
+        <span className="truncate">{data.name}</span>
         <ChevronDownIcon />
       </Button>
       <Tooltip>
