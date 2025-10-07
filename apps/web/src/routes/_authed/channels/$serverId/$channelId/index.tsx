@@ -29,6 +29,7 @@ import {
 } from "@tanstack/react-router";
 import { useSubscription } from "@trpc/tanstack-react-query";
 import { HashIcon, SendIcon } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useTRPC } from "@/lib/trpc";
@@ -49,6 +50,7 @@ function RouteComponent() {
   const { user } = useRouteContext({
     from: "/_authed",
   });
+  const bottomRef = useRef<HTMLDivElement | null>(null);
 
   const { data: server } = useSuspenseQuery(
     trpc.server.getOne.queryOptions({
@@ -67,6 +69,11 @@ function RouteComponent() {
       channelId: params.channelId,
     })
   );
+
+  useEffect(() => {
+    // scroll to the bottom whenever message list changes
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, []);
 
   useSubscription(
     trpc.event.onEvent.subscriptionOptions(undefined, {
@@ -112,6 +119,13 @@ function RouteComponent() {
                 ];
               }
             );
+
+            setTimeout(() => {
+              bottomRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+              });
+            }, 10);
             break;
 
           default:
@@ -163,12 +177,16 @@ function RouteComponent() {
           }
         );
 
+        setTimeout(() => {
+          bottomRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+          });
+        }, 10);
+
         form.reset();
       },
-      onSuccess: (newData) => {
-        console.log("new data", newData);
-        // TODO: scroll to bottom
-      },
+
       onError: (error) => {
         toast.error(
           error.message || "Unexpected error occurred while sending message"
@@ -184,7 +202,7 @@ function RouteComponent() {
   const isPending = sendMessage.isPending;
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex max-h-screen flex-1 flex-col overflow-y-auto">
       <div className="flex h-12 items-center justify-between border-b bg-background px-4">
         <div className="flex items-center gap-2">
           <HashIcon className="h-5 w-5 text-muted-foreground" />
@@ -224,6 +242,7 @@ function RouteComponent() {
               </div>
             </div>
           ))}
+          <div className="invisible" ref={bottomRef} />
         </div>
       </div>
       <div className="border-t p-4">
