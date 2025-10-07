@@ -5,11 +5,18 @@ import {
   CollapsibleTrigger,
 } from "@repo/ui/components/collapsible";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 import { cn } from "@repo/ui/lib/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
-import { ChevronDownIcon, HashIcon, PlusIcon } from "lucide-react";
+import { ChevronDownIcon, HashIcon, PlusIcon, Volume2Icon } from "lucide-react";
+import { useState } from "react";
 import { useTRPC } from "@/lib/trpc";
+import { CreateChannelDialog } from "./create-channel-dialog";
 
 export function ChannelList() {
   const params = useParams({
@@ -18,6 +25,8 @@ export function ChannelList() {
   const location = useLocation();
 
   const trpc = useTRPC();
+
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const {
     data: { channels },
@@ -37,14 +46,21 @@ export function ChannelList() {
               Channels
             </span>
           </CollapsibleTrigger>
-          {/* TODO: Create new channel */}
-          <Button
-            className="size-6 p-1 text-muted-foreground hover:text-foreground"
-            size="icon-sm"
-            variant="ghost"
-          >
-            <PlusIcon className="size-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="size-6 p-1 text-muted-foreground hover:text-foreground"
+                onClick={() => setIsCreateDialogOpen(true)}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <PlusIcon className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p>Create channel</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         <CollapsibleContent className="space-y-0.5">
           {channels.map((channel) => (
@@ -53,7 +69,7 @@ export function ChannelList() {
                 buttonVariants({ variant: "ghost" }),
                 "h-8 w-full justify-start rounded-md px-2 py-1",
                 location.pathname.includes(channel.id)
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground hover:bg-primary! hover:text-primary-foreground!"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
               )}
               key={channel.id}
@@ -63,12 +79,16 @@ export function ChannelList() {
               }}
               to="/channels/$serverId/$channelId"
             >
-              <HashIcon />
+              {channel.type === "text" ? <HashIcon /> : <Volume2Icon />}
               <span>{channel.name}</span>
             </Link>
           ))}
         </CollapsibleContent>
       </Collapsible>
+      <CreateChannelDialog
+        onOpenChange={setIsCreateDialogOpen}
+        open={isCreateDialogOpen}
+      />
     </div>
   );
 }
