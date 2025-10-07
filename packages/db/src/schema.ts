@@ -23,6 +23,30 @@ export const server = pgTable(
   (table) => [index("server_by_owner").on(table.ownerId)]
 );
 
+export const invite = pgTable(
+  "invite",
+  (t) => ({
+    id: t.uuid("id").notNull().primaryKey().defaultRandom(),
+    code: t.text("code").notNull().unique(),
+    uses: t.integer("uses").notNull().default(0),
+    maxUses: t.integer("max_uses"),
+    expiresAt: t.timestamp("expires_at"),
+    serverId: t
+      .uuid("server_id")
+      .notNull()
+      .references(() => server.id, { onDelete: "cascade" }),
+    createdBy: t
+      .text("created_by")
+      .notNull()
+      .references(() => user.id),
+    createdAt: t.timestamp("created_at").defaultNow().notNull(),
+  }),
+  (table) => [
+    index("invite_by_code").on(table.code),
+    uniqueIndex("invite_by_server_and_code").on(table.serverId, table.code),
+  ]
+);
+
 export const channelType = pgEnum("channel_type", ["text", "voice"]);
 
 export const channel = pgTable(
@@ -104,8 +128,20 @@ export const member = pgTable(
 export const serverRelations = relations(server, ({ one, many }) => ({
   channels: many(channel),
   members: many(member),
+  invites: many(invite),
   owner: one(user, {
     fields: [server.ownerId],
+    references: [user.id],
+  }),
+}));
+
+export const inviteRelations = relations(invite, ({ one }) => ({
+  server: one(server, {
+    fields: [invite.serverId],
+    references: [server.id],
+  }),
+  createdByUser: one(user, {
+    fields: [invite.createdBy],
     references: [user.id],
   }),
 }));

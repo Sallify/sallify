@@ -18,19 +18,6 @@ export const Route = createFileRoute("/_authed")({
       });
     }
 
-    // TODO: Remove later
-    if (
-      user.id === "0u4qTfe5uhgpsWu0IUWnuR4oMwWzxnva" ||
-      user.id === "yqVzW21bl30JzHpz9sldaFiOpcRjqRCy"
-    ) {
-      setTimeout(() => {
-        const audio = new Audio(
-          "https://thebrokenscript.wiki.gg/images/Bsod.ogg"
-        );
-        audio.volume = 1;
-      }, 3000);
-    }
-
     context.queryClient.prefetchQuery(
       context.trpc.server.getMany.queryOptions()
     );

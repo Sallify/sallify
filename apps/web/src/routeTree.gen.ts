@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
+import { Route as InviteCodeRouteImport } from './routes/invite/$code'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as ApiTrpcSplatRouteImport } from './routes/api/trpc.$'
@@ -28,6 +29,11 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 } as any)
 const AuthedRouteRoute = AuthedRouteRouteImport.update({
   id: '/_authed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteCodeRoute = InviteCodeRouteImport.update({
+  id: '/invite/$code',
+  path: '/invite/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignUpRoute = AuthSignUpRouteImport.update({
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/invite/$code': typeof InviteCodeRoute
   '/channels/$serverId': typeof AuthedChannelsServerIdRouteRouteWithChildren
   '/channels/@me': typeof AuthedChannelsAtmeRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/invite/$code': typeof InviteCodeRoute
   '/channels/$serverId': typeof AuthedChannelsServerIdRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/invite/$code': typeof InviteCodeRoute
   '/_authed/channels/$serverId': typeof AuthedChannelsServerIdRouteRouteWithChildren
   '/_authed/channels/@me': typeof AuthedChannelsAtmeRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/invite/$code'
     | '/channels/$serverId'
     | '/channels/@me'
     | '/api/auth/$'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/invite/$code'
     | '/channels/$serverId'
     | '/api/auth/$'
     | '/api/trpc/$'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/invite/$code'
     | '/_authed/channels/$serverId'
     | '/_authed/channels/@me'
     | '/api/auth/$'
@@ -157,6 +169,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  InviteCodeRoute: typeof InviteCodeRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
 }
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite/$code': {
+      id: '/invite/$code'
+      path: '/invite/$code'
+      fullPath: '/invite/$code'
+      preLoaderRoute: typeof InviteCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/sign-up': {
@@ -306,6 +326,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthedRouteRoute: AuthedRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  InviteCodeRoute: InviteCodeRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
 }
