@@ -52,7 +52,7 @@ function getBrowserWsClient() {
 export const getRouter = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
-      queries: { staleTime: 30 * 1000 },
+      queries: { staleTime: 30 * 1000, retry: false },
       dehydrate: { serializeData: superjson.serialize },
       hydrate: { deserializeData: superjson.deserialize },
     },

@@ -44,6 +44,14 @@ export const serverRouter = {
         where: eq(server.id, input.id),
         with: {
           members: true,
+          channels: {
+            orderBy: channel.position,
+            columns: {
+              topic: false,
+              createdAt: false,
+              updatedAt: false,
+            },
+          },
         },
       });
 

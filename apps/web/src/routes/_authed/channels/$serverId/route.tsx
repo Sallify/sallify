@@ -9,12 +9,6 @@ export const Route = createFileRoute("/_authed/channels/$serverId")({
         id: params.serverId,
       })
     );
-
-    context.queryClient.prefetchQuery(
-      context.trpc.channel.getManyByServerId.queryOptions({
-        id: params.serverId,
-      })
-    );
   },
 });
 
