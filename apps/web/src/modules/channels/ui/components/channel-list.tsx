@@ -12,7 +12,12 @@ import {
 } from "@repo/ui/components/tooltip";
 import { cn } from "@repo/ui/lib/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useLocation, useParams } from "@tanstack/react-router";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useRouteContext,
+} from "@tanstack/react-router";
 import { ChevronDownIcon, HashIcon, PlusIcon, Volume2Icon } from "lucide-react";
 import { useState } from "react";
 import { useTRPC } from "@/lib/trpc";
@@ -23,13 +28,16 @@ export function ChannelList() {
     from: "/_authed/channels/$serverId",
   });
   const location = useLocation();
+  const { user } = useRouteContext({
+    from: "/_authed",
+  });
 
   const trpc = useTRPC();
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const {
-    data: { channels },
+    data: { ownerId, channels },
   } = useSuspenseQuery(
     trpc.server.getOne.queryOptions({
       id: params.serverId,
@@ -40,27 +48,29 @@ export function ChannelList() {
     <div className="w-full space-y-0.5 px-2 py-4">
       <Collapsible className="space-y-0.5" defaultOpen>
         <div className="flex items-center justify-between">
-          <CollapsibleTrigger className="group flex items-center gap-1 rounded-md p-1 transition-colors hover:bg-accent/50">
+          <CollapsibleTrigger className="group flex w-full items-center gap-1 rounded-md p-1 transition-colors hover:bg-accent/50">
             <ChevronDownIcon className="size-3 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
             <span className="font-semibold text-muted-foreground text-xs uppercase tracking-wide">
               Channels
             </span>
           </CollapsibleTrigger>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                className="size-6 p-1 text-muted-foreground hover:text-foreground"
-                onClick={() => setIsCreateDialogOpen(true)}
-                size="icon-sm"
-                variant="ghost"
-              >
-                <PlusIcon className="size-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              <p>Create channel</p>
-            </TooltipContent>
-          </Tooltip>
+          {user.id === ownerId && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="size-6 p-1 text-muted-foreground hover:text-foreground"
+                  onClick={() => setIsCreateDialogOpen(true)}
+                  size="icon-sm"
+                  variant="ghost"
+                >
+                  <PlusIcon className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Create channel</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
         <CollapsibleContent className="space-y-0.5">
           {channels.map((channel) => (

@@ -19,24 +19,16 @@ export const Route = createFileRoute("/_authed")({
     }
 
     // TODO: Remove later
-    if (user.id === "0u4qTfe5uhgpsWu0IUWnuR4oMwWzxnva") {
+    if (
+      user.id === "0u4qTfe5uhgpsWu0IUWnuR4oMwWzxnva" ||
+      user.id === "yqVzW21bl30JzHpz9sldaFiOpcRjqRCy"
+    ) {
       setTimeout(() => {
-        document.body.innerHTML = `
-      <div style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        height:100vh;
-        flex-direction:column;
-        font-family:sans-serif;
-        color:black;
-      ">
-        <h1>Aw, Snap!</h1>
-        <p>Something went wrong while displaying this webpage.</p>
-      </div>
-    `;
-        document.body.style.background = "#f1f3f4";
-      }, 100);
+        const audio = new Audio(
+          "https://thebrokenscript.wiki.gg/images/Bsod.ogg"
+        );
+        audio.volume = 1;
+      }, 3000);
     }
 
     context.queryClient.prefetchQuery(

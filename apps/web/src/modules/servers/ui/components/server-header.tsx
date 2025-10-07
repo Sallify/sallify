@@ -7,8 +7,9 @@ import {
 } from "@repo/ui/components/tooltip";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
-import { ChevronDownIcon, UserPlusIcon } from "lucide-react";
+import { UserPlusIcon } from "lucide-react";
 import { useTRPC } from "@/lib/trpc";
+import { ServerDropdown } from "./server-dropdown";
 
 export function ServerHeader() {
   const params = useParams({
@@ -25,14 +26,7 @@ export function ServerHeader() {
 
   return (
     <div className="flex h-12 max-w-[300px] items-center justify-between gap-2 border-b p-2">
-      <Button
-        className="max-w-[244px] items-center justify-start overflow-hidden"
-        size="sm"
-        variant="ghost"
-      >
-        <span className="truncate">{data.name}</span>
-        <ChevronDownIcon />
-      </Button>
+      <ServerDropdown server={data} />
       <Tooltip>
         <TooltipTrigger asChild>
           <Button size="icon-sm" variant="ghost">

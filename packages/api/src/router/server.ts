@@ -124,4 +124,68 @@ export const serverRouter = {
         };
       });
     }),
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const existingServer = await ctx.db.query.server.findFirst({
+        where: eq(server.id, input.id),
+      });
+
+      if (!existingServer) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Server not found",
+        });
+      }
+
+      if (existingServer.ownerId !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not the owner of this server",
+        });
+      }
+
+      await ctx.db.delete(server).where(eq(server.id, input.id));
+    }),
+  leave: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const existingServer = await ctx.db.query.server.findFirst({
+        where: eq(server.id, input.id),
+        with: {
+          members: {
+            columns: {
+              userId: true,
+            },
+          },
+        },
+      });
+
+      if (!existingServer) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Server not found",
+        });
+      }
+
+      if (!existingServer.members.some((mem) => mem.userId === ctx.user.id)) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You are not a member of this server",
+        });
+      }
+
+      if (existingServer.ownerId === ctx.user.id) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You are the owner of this server",
+        });
+      }
+
+      await ctx.db
+        .delete(member)
+        .where(
+          and(eq(member.serverId, input.id), eq(member.userId, ctx.user.id))
+        );
+    }),
 } satisfies TRPCRouterRecord;
